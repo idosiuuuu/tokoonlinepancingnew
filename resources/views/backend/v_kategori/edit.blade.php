@@ -9,7 +9,6 @@
                     <form action="{{ route('backend.kategori.update', $edit->id) }}" method="post">
                         @method('put')
                         @csrf
-
                         <div class="card-body">
                             <h4 class="card-title"> {{ $sub }} </h4>
                             <div class="form-group">

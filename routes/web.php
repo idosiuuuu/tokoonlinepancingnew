@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\UserController;
@@ -11,7 +12,8 @@ use App\Models\User;
 use GuzzleHttp\Middleware;
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect()->route('beranda');
 });
 
 Route::get('backend/beranda', [BerandaController::class, 'berandaBackend'])->name('backend.beranda')->middleware('auth');
@@ -47,3 +49,18 @@ Route::post('backend/laporan/cetakproduk', [ProdukController::class, 'cetakProdu
 Route::post('foto-produk/store', [ProdukController::class, 'storeFoto'])->name('backend.foto_produk.store')->middleware('auth');
 // Route untuk menghapus foto 
 Route::delete('foto-produk/{id}', [ProdukController::class, 'destroyFoto'])->name('backend.foto_produk.destroy')->middleware('auth');
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Frontend
+Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda');
+Route::get('/produk/detail/{id}', [ProdukController::class, 'detail'])->name('produk.detail');
+Route::get('/produk/kategori/{id}', [ProdukController::class, 'filterKategori'])->name('produk.kategori');
+Route::get('/produk/all', [ProdukController::class, 'produkAll'])->name('produk.all');
+
+//API Google
+Route::get('/auth/redirect', [CustomerController::class, 'redirect'])->name('auth.redirect');
+Route::get('/auth/google/callback', [CustomerController::class, 'callback'])->name('auth.callback');
+// Logout
+Route::post('/logout', [CustomerController::class, 'logout'])->name('logout');

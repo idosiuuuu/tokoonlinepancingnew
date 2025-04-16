@@ -24,8 +24,7 @@
                                                 width="100%">
                                             <p></p>
                                         @else
-                                            <img src="{{ asset('storage/img-produk/img
-                                                                                                                                                                                                                                                                                                                    default.jpg') }}"
+                                            <img src="{{ asset('storage/img-produk/img-default.jpg') }}"
                                                 class="foto-preview" width="100%">
                                             <p></p>
                                         @endif
