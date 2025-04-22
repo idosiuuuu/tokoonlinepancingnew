@@ -5,11 +5,13 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
 use App\Models\User;
 use GuzzleHttp\Middleware;
+use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -29,12 +31,31 @@ Route::resource('backend/kategori', KategoriController::class, ['as' => 'backend
 // Route untuk Produk 
 Route::resource('backend/produk', ProdukController::class, ['as' => 'backend'])->middleware('auth');
 // Route untuk customer
-Route::prefix('backend')->middleware('auth')->group(function () {
-    Route::get('customer', [UserController::class, 'customer'])->name('backend.customer');
-    Route::get('createcustomer', [UserController::class, 'createcustomer'])->name('backend.createcustomer');
-    Route::post('storecustomer', [UserController::class, 'storecustomer'])->name('backend.storecustomer');
-    Route::get('editcustomer/{id}', [UserController::class, 'editcustomer'])->name('backend.editcustomer');
-    Route::put('updatecustomer/{id}', [UserController::class, 'updatecustomer'])->name('backend.updatecustomer');
+// Route::prefix('backend')->middleware('auth')->group(function () {
+//     Route::get('customer', [UserController::class, 'customer'])->name('backend.customer');
+//     Route::get('createcustomer', [UserController::class, 'createcustomer'])->name('backend.createcustomer');
+//     Route::post('storecustomer', [UserController::class, 'storecustomer'])->name('backend.storecustomer');
+//     Route::get('editcustomer/{id}', [UserController::class, 'editcustomer'])->name('backend.editcustomer');
+//     Route::put('updatecustomer/{id}', [UserController::class, 'updatecustomer'])->name('backend.updatecustomer');
+// });
+
+// Route untuk customer
+Route::resource('backend/customer', CustomerController::class, ['as' => 'backend'])->middleware('auth');
+
+// Group route untuk customer
+Route::middleware('is.customer')->group(function () {
+    // Route untuk menampilkan halaman akun customer
+    Route::get('/customer/akun/{id}', [CustomerController::class, 'akun'])
+        ->name('customer.akun');
+
+    // Route untuk mengupdate data akun customer
+    Route::put('/customer/updateakun/{id}', [CustomerController::class, 'updateAkun'])
+        ->name('customer.updateakun');
+        
+    // Route untuk menambahkan produk ke keranjang
+    Route::post('add-to-cart/{id}', [OrderController::class, 'addToCart'])->name('order.addToCart');
+    Route::get('cart', [OrderController::class, 'viewCart'])->name('order.cart');
+
 });
 
 
@@ -62,5 +83,13 @@ Route::get('/produk/all', [ProdukController::class, 'produkAll'])->name('produk.
 //API Google
 Route::get('/auth/redirect', [CustomerController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/google/callback', [CustomerController::class, 'callback'])->name('auth.callback');
+
 // Logout
 Route::post('/logout', [CustomerController::class, 'logout'])->name('logout');
+
+Route::get('/list-ongkir', function () {
+    $response = Http::withHeaders([
+        'key' => 'your_api_key'
+    ])->get('https://api.rajaongkir.com/starter/province'); //ganti 'province' atau 'city'
+    dd($response->json());
+});

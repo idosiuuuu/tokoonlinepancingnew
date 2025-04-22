@@ -13,7 +13,7 @@
                                     class="mdi mdi-account"></i><span class="hide-menu">User</span></a>
                         </li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="{{ route('backend.customer') }}" aria-expanded="false"><i
+                                href="{{ route('backend.customer.index') }}" aria-expanded="false"><i
                                     class="mdi mdi-account-outline"></i><span class="hide-menu">Customer</span></a>
                         </li>
 

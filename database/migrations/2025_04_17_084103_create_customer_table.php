@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('google_token')->nullable();
             $table->string('alamat')->nullable();
             $table->string('pos')->nullable();
+            // $table->string('hp', 13)->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
-
 
         });
     }

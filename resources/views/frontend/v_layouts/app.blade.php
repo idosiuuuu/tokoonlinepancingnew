@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+@php
+    use Illuminate\Support\Facades\DB;
+    use App\Models\Produk;
+    use App\Models\Kategori;
+@endphp
 
 <head>
     <meta charset="utf-8">
@@ -80,25 +85,47 @@
                         </li>
                         <!-- /Cart -->
 
-                        <!-- Account -->
-                        <li class="header-account dropdown default-dropdown">
-                            <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
-                                <div class="header-btns-icon">
-                                    <i class="fa fa-user-o"></i>
+                        @if (Auth::check())
+                            <!-- Account -->
+                            <li class="header-account dropdown default-dropdown">
+                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+                                    <div class="header-btns-icon">
+                                        <i class="fa fa-user-o"></i>
+                                    </div>
+                                    <strong class="text-uppercase">{{ Auth::user()->nama }}<i
+                                            class="fa fa-caret-down"></i></strong>
                                 </div>
-                                <strong class="text-uppercase">Akun Saya<i class="fa fa-caret-down"></i></strong>
-                            </div>
-                            <a href="{{ route('auth.redirect') }}" class="text-uppercase">Login</a>
-                            <ul class="custom-menu">
-                                <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
-                                <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
-                                <li><a href="#"><i class="fa fa-exchange"></i> Compare</a></li>
-                                <li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>
-                                <li><a href="#"><i class="fa fa-unlock-alt"></i> Login</a></li>
-                                <li><a href="#"><i class="fa fa-user-plus"></i> Create An Account</a></li>
-                            </ul>
-                        </li>
-                        <!-- /Account -->
+                                <ul class="custom-menu">
+                                    <li><a href="{{ route('customer.akun', ['id' => Auth::user()->id]) }}"><i
+                                                class="fa fa-user-o"></i> Akun Saya</a></li>
+                                    <li><a href="#"><i class="fa fa-check"></i> History</a></li>
+                                    <li>
+                                        <a href="#"
+                                            onclick="event.preventDefault(); document.getElementById('keluar-app').submit();"><i
+                                                class="fa fa-power-off"></i> Keluar
+                                        </a>
+                                        <!-- form keluar app -->
+                                        <form id="keluar-app" action="{{ route('logout') }}" method="POST"
+                                            class="d-none">
+                                            @csrf
+                                        </form>
+                                        <!-- form keluar app end -->
+                                    </li>
+                                </ul>
+                            </li>
+                        @else
+                            <li class="header-account dropdown default-dropdown">
+                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+                                    <div class="header-btns-icon">
+                                        <i class="fa fa-user-o"></i>
+                                    </div>
+                                    <strong class="text-uppercase">Akun Saya<i class="fa fa-caret-down"></i></strong>
+                                </div>
+                                <a href="{{ route('auth.redirect') }}" class="text-uppercase">Login</a>
+                            </li>
+
+                            <!-- /Account -->
+                        @endif
 
                         <!-- Mobile nav toggle-->
                         <li class="nav-toggle">
@@ -227,49 +254,10 @@
                 <div id="aside" class="col-md-3">
                     <!-- aside widget -->
                     <div class="aside">
-                        <h3 class="aside-title">Top Rated Product</h3>
-                        <!-- widget product -->
-                        <div class="product product-widget">
-                            <div class="product-thumb">
-                                <img src="{{ asset('frontend/img/thumb-product01.jpg') }}" alt="">
-                            </div>
-                            <div class="product-body">
-                                <h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
-                                <h3 class="product-price">$32.50 <del class="product-old-price">$45.00</del></h3>
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o empty"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /widget product -->
-
-                        <!-- widget product -->
-                        <div class="product product-widget">
-                            <div class="product-thumb">
-                                <img src="{{ asset('frontend/img/thumb-product01.jpg') }}" alt="">
-                            </div>
-                            <div class="product-body">
-                                <h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
-                                <h3 class="product-price">$32.50</h3>
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o empty"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /widget product -->
-                    </div>
-                    <!-- /aside widget -->
-                    <!-- aside widget -->
-                    <div class="aside">
-                        <h3 class="aside-title">Filter Kategori</h3>
+                        <h3 class="aside-title">Kategori</h3>
+                        @php
+                            $kategori = DB::table('kategori')->orderBy('nama_kategori', 'asc')->get();
+                        @endphp
                         <ul class="list-links">
                             @foreach ($kategori as $row)
                                 <li><a href="{{ route('produk.kategori', $row->id) }}">{{ $row->nama_kategori }}</a>
@@ -277,24 +265,65 @@
                             @endforeach
                         </ul>
                     </div>
+                    <!-- /aside widget -->
+                    <!-- aside widget -->
+                    @php
+                        // Query untuk mendapatkan produk terlaris
+                        $produkTerlaris = DB::table('order_item')
+                            ->select('produk_id', DB::raw('SUM(quantity) as total_quantity'))
+                            ->groupBy('produk_id')
+                            ->orderBy('total_quantity', 'desc')
+                            ->take(5) // Ambil 5 produk terlaris
+                            ->get();
 
+                        // Mengambil detail produk
+                        $produkTerlaris = $produkTerlaris->map(function ($item) {
+                            $produk = Produk::find($item->produk_id);
+                            $item->produk = $produk;
+                            return $item;
+                        });
+                    @endphp
+
+                    <div class="aside">
+                        <h3 class="aside-title">Produk Terlaris</h3>
+                        <!-- widget product -->
+                        @foreach ($produkTerlaris as $item)
+                            <div class="product product-widget">
+
+
+                                <div class="product-thumb">
+                                    <img src="{{ asset('storage/img-produk/thumb_md_' . $item->produk->foto) }}"
+                                        alt="">
+                                </div>
+                                <div class="product-body">
+                                    <h2 class="product-name"><a href="#">{{ $item->produk->nama_produk }}</a>
+                                    </h2>
+                                    <h3 class="product-price">Rp.
+                                        {{ number_format($item->produk->harga, 0, ',', '.') }}
+                                    </h3>
+
+                                </div>
+
+                            </div>
+                        @endforeach
+                        <!-- /widget product -->
+                    </div>
                     <!-- /aside widget -->
                 </div>
                 <!-- /ASIDE -->
 
                 <!-- MAIN -->
                 <div id="main" class="col-md-9">
-                    <!-- store top filter -->
-                    <!-- /store top filter -->
+                    <!-- STORE -->
 
-                    <!-- @yieldAwal -->
+
+                    <!-- isi template -->
                     @yield('content')
-                    <!-- @yieldAkhir-->
+                    <!-- end isi template -->
 
 
-                    <!-- store bottom filter -->
+                    <!-- /STORE -->
 
-                    <!-- /store bottom filter -->
                 </div>
                 <!-- /MAIN -->
             </div>
@@ -408,6 +437,21 @@
     <script src="{{ asset('frontend/js/nouislider.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.zoom.min.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+
+    <script>
+        // previewFoto
+        function previewFoto() {
+            const foto = document.querySelector('input[name="foto"]');
+            const fotoPreview = document.querySelector('.foto-preview');
+            fotoPreview.style.display = 'block';
+            const fotoReader = new FileReader();
+            fotoReader.readAsDataURL(foto.files[0]);
+            fotoReader.onload = function(fotoEvent) {
+                fotoPreview.src = fotoEvent.target.result;
+                fotoPreview.style.width = '100%';
+            }
+        }
+    </script>
 
 </body>
 

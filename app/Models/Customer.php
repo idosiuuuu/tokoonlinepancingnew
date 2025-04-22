@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Customer extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'customer';
 
@@ -51,6 +52,5 @@ class Customer extends Model
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
 
 }
