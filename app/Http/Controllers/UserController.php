@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::where('role', '!=', '2')->orderBy('updated_at', 'desc')->get();
+        $user = User::orderBy('updated_at', 'desc')->get();
         return view('backend.v_user.index', [
             'judul' => 'User',
             'sub' => 'Data User',
@@ -169,7 +169,7 @@ class UserController extends Controller
         $role = $user->role;
         $user->delete();
         if ($role == 2) {
-            return redirect()->route('backend.customer')->with('success', 'Customer berhasil dihapus');
+            return redirect()->route('backend.user.index')->with('success', 'Customer berhasil dihapus');
         } else {
             return redirect()->route('backend.user.index')->with('success', 'Data berhasil dihapus');
         }
@@ -209,17 +209,17 @@ class UserController extends Controller
         ]);
     }
 
-    public function customer()
-    {
-        $user = User::where('role', '2') // hanya customer
-            ->orderBy('updated_at', 'desc')
-            ->get();
-        return view('backend.v_customer.index', [
-            'judul' => 'Customer',
-            'sub' => 'Data Customer',
-            'index' => $user,
-        ]);
-    }
+    // public function customer()
+    // {
+    //     $user = User::where('role', '2') // hanya customer
+    //         ->orderBy('updated_at', 'desc')
+    //         ->get();
+    //     return view('backend.v_customer.index', [
+    //         'judul' => 'Customer',
+    //         'sub' => 'Data Customer',
+    //         'index' => $user,
+    //     ]);
+    // }
 
     // public function createcustomer()
     // {

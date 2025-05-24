@@ -16,19 +16,122 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customer = Customer::orderBy('id', 'desc')->get();
+        $user = Customer::orderBy('updated_at', 'desc')->get();
         return view('backend.v_customer.index', [
             'judul' => 'Customer',
-            'sub' => 'Halaman Customer',
-            'index' => $customer
+            'sub' => 'Data Customer',
+            'index' => $user
         ]);
     }
+
+    public function edit(string $id)
+    {
+        $user = User::findOrFail($id);
+        return view('backend.v_customer.edit', [
+            'judul' => 'Customer',
+            'sub' => 'Ubah Customer',
+            'edit' => $user,
+        ]);
+    }
+    public function destroy(string $id)
+    {
+        $user = user::findOrFail($id);
+        if ($user->foto) {
+            $oldImagePath = public_path('storage/img-user/') . $user->foto;
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+        $role = $user->role;
+        $user->delete();
+        if ($role == 2) {
+            return redirect()->route('backend.customer.index')->with('success', 'Customer berhasil dihapus');
+        } else {
+            return redirect()->route('backend.user.index')->with('success', 'Data berhasil dihapus');
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+    $customer = Customer::with('user')->where('user_id', $id)->firstOrFail();
+
+    $rules = [
+        'nama' => 'required|max:255',
+        'hp' => 'required|min:10|max:13',
+        'foto' => 'image|mimes:jpeg,jpg,png,gif|file|max:1024',
+    ];
+
+    $messages = [
+        'foto.image' => 'Format gambar gunakan file dengan ekstensi jpeg, jpg, png, atau gif.',
+        'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.'
+    ];
+
+    // Validasi email di tabel users, bukan customer
+    if ($request->email != $customer->user->email) {
+        $rules['email'] = 'required|max:255|email|unique:user,email,' . $customer->user_id;
+    }
+
+    if ($request->alamat != $customer->alamat) {
+        $rules['alamat'] = 'required';
+    }
+    if ($request->pos != $customer->pos) {
+        $rules['pos'] = 'required';
+    }
+
+    $validatedData = $request->validate($rules, $messages);
+
+    // Handle upload foto baru
+    if ($request->file('foto')) {
+        if ($customer->foto) {
+            $oldImagePath = public_path('storage/img-customer/') . $customer->user->foto;
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+
+        $file = $request->file('foto');
+        $extension = $file->getClientOriginalExtension();
+        $originalFileName = date('YmdHis') . '_' . uniqid() . '.' . $extension;
+        $directory = 'storage/img-customer/';
+
+        ImageHelper::uploadAndResize($file, $directory, $originalFileName, 385, 400);
+        $validatedData['foto'] = $originalFileName;
+    }
+    // Update nama & email ke tabel `user`
+    $customer->user->update([
+    'nama' => $request->input('nama'),
+    'email' => $request->input('email'),
+    ]);
+
+    // Update alamat dan pos ke tabel customer
+    $customer->update([
+    'alamat' => $request->input('alamat'),
+    'pos' => $request->input('pos'),
+    ]);
+
+    
+
+    return redirect()->route('backend.customer.index', $id)->with('success', 'Data berhasil diperbarui');
+    }
+    
 
     // Redirect ke Google
     public function redirect()
     {
         return Socialite::driver('google')->redirect();
     }
+
+    public function detail($id) // Tambahkan parameter ID
+{
+    $user = User::findOrFail($id); // Ambil single user
+    return view('backend.v_customer.detail', [
+        'judul' => 'Customer',
+        'sub' => 'Detail Customer',
+        'row' => $user // Ubah menjadi $row untuk konsisten dengan view
+    ]);
+}
+
+    
 
     // Callback dari Google
     public function callback()
@@ -63,6 +166,8 @@ class CustomerController extends Controller
                     'google_id' => $socialUser->id,
                     'google_token' => $socialUser->token
                 ]);
+
+                // dd($customer);
 
 
                 // Login pengguna baru
@@ -107,7 +212,8 @@ class CustomerController extends Controller
     }
 
     public function updateAkun(Request $request, $id)
-{
+
+    {
     $customer = Customer::where('user_id', $id)->firstOrFail();
     $rules = [
         'nama' => 'required|max:255',
@@ -156,7 +262,7 @@ class CustomerController extends Controller
         'pos' => $request->input('pos'),
     ]);
     return redirect()->route('customer.akun', $id)->with('success', 'Data berhasil diperbarui');
-}
+    }
 
 
 }

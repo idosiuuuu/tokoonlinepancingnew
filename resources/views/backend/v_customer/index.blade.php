@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    <h5 class="card-title">{{ $judul }} <br><br>
+                    <h5 class="card-title">{{ $sub }} <br><br>
                     </h5>
 
                     <div class="table-responsive">
@@ -27,16 +27,19 @@
                                         <td> {{ $row->user->nama }} </td>
                                         <td> {{ $row->user->email }} </td>
                                         <td>
-                                            <a href="#" title="Ubah Data">
+                                            <a href="{{ route('frontend.detailcustomer', $row->user->id) }}"
+                                                title="Ubah Data">
                                                 <button type="button" class="btn btn-warning btn-sm"><i
                                                         class="fas fa-eye"></i> Detail</button>
                                             </a>
-                                            <a href="#" title="Ubah Data">
+                                            <a href="{{ route('backend.customer.edit', $row->user->id) }}"
+                                                title="Ubah Data">
                                                 <button type="button" class="btn btn-cyan btn-sm"><i
                                                         class="far fa-edit"></i> Ubah</button>
                                             </a>
-
-                                            <form method="POST" action="#" style="display: inline-block;">
+                                            <form method="POST"
+                                                action="{{ route('backend.customer.destroy', $row->user->id) }}""
+                                                style="display: inline-block;">
                                                 @method('delete')
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm show_confirm"
@@ -54,6 +57,7 @@
             </div>
         </div>
     </div>
+
 
 
     <!-- contentAkhir -->

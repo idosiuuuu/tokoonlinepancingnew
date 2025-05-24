@@ -8,6 +8,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
@@ -74,16 +75,51 @@
                 </div>
                 <div class="pull-right">
                     <ul class="header-btns">
-                        <!-- Cart -->
-                        <li class="header-cart dropdown default-dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <div class="header-btns-icon">
-                                    <i class="fa fa-shopping-cart"></i>
+                        @if (Auth::check())
+                            <!-- Cart -->
+                            <li class="header-cart dropdown default-dropdown">
+                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+                                    <div class="header-btns-icon">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </div>
+                                    <strong class="text-uppercase">Keranjang <i class="fa fa-caret-down"></i></strong>
                                 </div>
-                                <strong class="text-uppercase">Keranjang</strong>
-                            </a>
-                        </li>
-                        <!-- /Cart -->
+
+                                <ul class="custom-menu">
+                                    @if ($order && $order->orderItems->count())
+                                        @foreach ($order->orderItems as $item)
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-cube"></i>
+                                                    {{ $item->produk->nama_produk }} ({{ $item->quantity }})
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="{{ route('order.cart') }}">
+                                                <i class="fa fa-shopping-cart"></i> Lihat Keranjang
+                                            </a>
+                                        </li>
+                                    @else
+                                        <li><a><i class="fa fa-info-circle"></i> Keranjang kosong</a></li>
+                                    @endif
+                                </ul>
+                            </li>
+                            <!-- /Cart -->
+                        @else
+                            <!-- Cart (Guest) -->
+                            <li class="header-cart dropdown default-dropdown">
+                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+                                    <div class="header-btns-icon">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </div>
+                                    <strong class="text-uppercase">Keranjang <i class="fa fa-caret-down"></i></strong>
+                                </div>
+                                {{-- <a href="{{ route('auth.redirect') }}" class="text-uppercase">Login untuk melihat</a> --}}
+                            </li>
+                        @endif
+
 
                         @if (Auth::check())
                             <!-- Account -->
@@ -416,9 +452,8 @@
                         Copyright &copy;
                         <script>
                             document.write(new Date().getFullYear());
-                        </script> All rights reserved | This template is made with <i
-                            class="fa fa-heart-o" aria-hidden="true"></i> by <a href="#"
-                            target="_blank">Colorlib</a>
+                        </script> Toko Dika Fishing <i class="#" aria-hidden="true"></i> by
+                        <a href="#" target="_blank">ANDIKA AND FIRDAUS</a>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
                     <!-- /footer copyright -->
