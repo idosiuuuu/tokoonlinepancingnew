@@ -281,7 +281,7 @@ class ProdukController extends Controller
     public function formProduk()
     {
         return view('backend.v_produk.form', [
-            'judul' => 'Data Produk',
+            'judul' => 'Laporan',
             'sub' => 'Laporan Data Produk',
         ]);
     }

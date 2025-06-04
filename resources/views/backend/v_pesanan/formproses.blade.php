@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <form class="form-horizontal" action="{{ route('backend.laporan.cetakproduk') }}" method="post"
+                <form class="form-horizontal" action="{{ route('backend.laporan.cetakorderproses') }}" method="post"
                     target="_blank">
                     @csrf
 

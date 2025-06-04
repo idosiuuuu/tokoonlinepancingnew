@@ -85,6 +85,17 @@ Route::post('backend/laporan/cetakuser', [UserController::class, 'cetakUser'])->
 // Route untuk laporan produk
 Route::get('backend/laporan/formproduk', [ProdukController::class, 'formProduk'])->name('backend.laporan.formproduk')->middleware('auth');
 Route::post('backend/laporan/cetakproduk', [ProdukController::class, 'cetakProduk'])->name('backend.laporan.cetakproduk')->middleware('auth');
+// Route untuk laporan order
+Route::get('backend/laporan/formorderproses', [OrderController::class, 'formOrderProses'])->name('backend.laporan.formorderproses')->middleware('auth');
+Route::post('backend/laporan/cetakorderproses', [OrderController::class, 'cetakOrderProses'])->name('backend.laporan.cetakorderproses')->middleware('auth');
+Route::get('backend/laporan/formorderselesai', [OrderController::class, 'formOrderSelesai'])->name('backend.laporan.formorderselesai')->middleware('auth');
+Route::post('backend/laporan/cetakorderselesai', [OrderController::class, 'cetakOrderSelesai'])->name('backend.laporan.cetakorderselesai')->middleware('auth');
+// Route untuk data pesanan
+Route::get('pesanan/proses', [OrderController::class, 'statusProses'])->name('pesanan.proses')->middleware('auth');
+Route::get('pesanan/selesai', [OrderController::class, 'statusSelesai'])->name('pesanan.selesai')->middleware('auth');
+Route::get('pesanan/detail/{id}', [OrderController::class, 'statusDetail'])->name('pesanan.detail')->middleware('auth');
+Route::put('pesanan/update/{id}', [OrderController::class, 'statusUpdate'])->name('pesanan.update')->middleware('auth');
+Route::get('pesanan/invoice/{id}', [OrderController::class, 'invoiceBackend'])->name('pesanan.invoice')->middleware('auth');
 // Route untuk menambahkan foto 
 Route::post('foto-produk/store', [ProdukController::class, 'storeFoto'])->name('backend.foto_produk.store')->middleware('auth');
 // Route untuk menghapus foto 

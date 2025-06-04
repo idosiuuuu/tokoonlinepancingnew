@@ -8,7 +8,7 @@
                 <form class="form-horizontal" action="{{ route('backend.laporan.cetakuser') }}" method="post" target="_blank">
                     @csrf
                     <div class="card-body">
-                        <h4 class="card-title"> {{ $judul }} </h4>
+                        <h4 class="card-title"> {{ $sub }} </h4>
 
                         <div class="form-group">
                             <label>Tanggal Awal</label>
@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-
+    </div>
 
     <!-- contentAkhir -->
 @endsection

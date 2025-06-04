@@ -178,7 +178,7 @@ class UserController extends Controller
     public function formUser()
     {
         return view('backend.v_user.form', [
-            'judul' => 'Data User',
+            'judul' => 'Laporan',
             'sub' => 'Laporan Data User',
         ]);
     }
