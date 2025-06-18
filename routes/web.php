@@ -6,8 +6,10 @@ use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PageFrontend;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RajaOngkirController;
+use App\Http\Controllers\RajaOngkirControllerV2;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
 use App\Models\User;
@@ -31,18 +33,16 @@ Route::resource('backend/user', UserController::class, ['as' => 'backend'])->mid
 Route::resource('backend/kategori', KategoriController::class, ['as' => 'backend'])->middleware('auth');
 // Route untuk Produk 
 Route::resource('backend/produk', ProdukController::class, ['as' => 'backend'])->middleware('auth');
-// Route untuk customer
-// Route::prefix('backend')->middleware('auth')->group(function () {
-//     Route::get('customer', [UserController::class, 'customer'])->name('backend.customer');
-//     Route::get('createcustomer', [UserController::class, 'createcustomer'])->name('backend.createcustomer');
-//     Route::post('storecustomer', [UserController::class, 'storecustomer'])->name('backend.storecustomer');
-//     Route::get('editcustomer/{id}', [UserController::class, 'editcustomer'])->name('backend.editcustomer');
-//     Route::put('updatecustomer/{id}', [UserController::class, 'updatecustomer'])->name('backend.updatecustomer');
-// });
+
 
 // Route untuk customer
 Route::resource('backend/customer', CustomerController::class, ['as' => 'backend'])->middleware('auth');
 
+// Route untuk login frontend
+Route::get('login', [LoginController::class, 'loginFrontend'])->name('frontend.login');
+Route::post('frontend/login', [LoginController::class, 'authenticateFrontend'])->name('frontend.login');
+// Route::get('frontend/register', [RegisterController::class, 'registerFrontend'])->name('frontend.register');
+// Route::post('frontend/register', [RegisterController::class, 'storeFrontend'])->name('frontend.register');
 
 Route::get('detail/{id}', [CustomerController::class, 'detail'])->name('frontend.detailcustomer')->middleware('auth');
 // Group route untuk customer
@@ -72,6 +72,11 @@ Route::middleware('is.customer')->group(function () {
     Route::get('select-payment', [OrderController::class, 'selectPayment'])->name('order.selectpayment');
     // Rute untuk halaman checkout
     Route::get('/order/complete', [OrderController::class, 'complete'])->name('order.complete');
+
+    // Route history
+    Route::get('history', [OrderController::class, 'orderHistory'])->name('order.history');
+    Route::get('order/invoice/{id}', [OrderController::class, 'invoiceFrontend'])->name('order.invoice');
+
 
 
 
@@ -110,6 +115,9 @@ Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda');
 Route::get('/produk/detail/{id}', [ProdukController::class, 'detail'])->name('produk.detail');
 Route::get('/produk/kategori/{id}', [ProdukController::class, 'filterKategori'])->name('produk.kategori');
 Route::get('/produk/all', [ProdukController::class, 'produkAll'])->name('produk.all');
+Route::get('/profil', [PageFrontend::class, 'profil'])->name('frontend.profil');
+Route::get('/carapesan', [PageFrontend::class, 'carapesan'])->name('frontend.carapesan');
+Route::get('/lokasi', [PageFrontend::class, 'lokasi'])->name('frontend.lokasi');
 
 //API Google
 Route::get('/auth/redirect', [CustomerController::class, 'redirect'])->name('auth.redirect');
@@ -120,7 +128,7 @@ Route::post('/logout', [CustomerController::class, 'logout'])->name('logout');
 
 Route::get('/list-ongkir', function () {
     $response = Http::withHeaders([
-        'key' => '794a5d197b9cb469ae958ed043ccf921' // Ganti dengan API key asli
+        'key' => 'LyUjjMfTa79ac68feb60f880wURK3uFo' // Ganti dengan API key asli
     ])->get('https://api.rajaongkir.com/starter/city');
     
     return $response->json();
@@ -155,10 +163,16 @@ Route::get('/list-ongkir2', function () {
 Route::get('/cek-api-key', function () {
     $response = Http::withHeaders([
         'accept' => 'application/json',
-        'key' => env('RAJAONGKIR_API_KEY'),
+        'key' => ('LyUjjMfTa79ac68feb60f880wURK3uFo'),
     ])->get('https://rajaongkir.komerce.id/api/v1/destination/domestic-destination');
 
     dd($response->json());
 
-    });
+});
 
+// cek_raja_ongkir_v2
+Route::get('/cek_raja_ongkir_v2', function () {
+    return view('frontend/ongkir_v2');
+});
+Route::get('/ongkir/get-destination', [RajaOngkirControllerV2::class, 'getDestination']);
+Route::post('/ongkir/calculate', [RajaOngkirControllerV2::class, 'calculateOngkir']);

@@ -46,6 +46,8 @@
                                                 Super Admin</option>
                                             <option value="0" {{ old('role', $edit->role) == '0' ? 'selected' : '' }}>
                                                 Admin</option>
+                                            <option value="2" {{ old('role', $edit->role) == '2' ? 'selected' : '' }}>
+                                                Customer</option>
                                         </select>
                                         @error('role')
                                             <span class="invalid-feedback alert-danger" role="alert">

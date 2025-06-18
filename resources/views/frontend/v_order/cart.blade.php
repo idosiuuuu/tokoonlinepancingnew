@@ -26,7 +26,7 @@
                 </div>
             @endif
             <!-- end msgError -->
-            @if ($order && $order->orderItems->count() > 0)
+            @if ($orderpending && $orderpending->orderItems->count() > 0)
                 <table class="shopping-cart-table table">
                     <thead>
                         <tr>
@@ -43,7 +43,7 @@
                             $totalHarga = 0;
                             $totalBerat = 0;
                         @endphp
-                        @foreach ($order->orderItems as $item)
+                        @foreach ($orderpending->orderItems as $item)
                             @php
                                 $totalHarga += $item->harga * $item->quantity;
                                 $totalBerat += $item->produk->berat * $item->quantity;
@@ -58,7 +58,7 @@
                                         <li><span>Berat: {{ $item->produk->berat }} Gram</span></li>
                                     </ul>
                                     <ul>
-                                        <li><span>Stok: {{ $item->produk->stok }} Gram</span></li>
+                                        <li><span>Stok: {{ $item->produk->stok }} Stok</span></li>
                                     </ul>
                                 </td>
                                 <td class="price text-center"><strong>Rp.
@@ -76,7 +76,7 @@
                                 <td class="text-right">
                                     <form action="{{ route('order.remove', $item->produk->id) }}" method="post">
                                         @csrf
-                                        <button class="main-btn icon-btn"><i class="fa fa-close"></i></button>
+                                        <button class="main-btn icon-btn"><i class="fa fa-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>

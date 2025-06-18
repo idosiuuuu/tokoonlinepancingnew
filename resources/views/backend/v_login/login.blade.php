@@ -40,8 +40,8 @@
         <!-- ============================================================== -->
         <!-- Login box.scss -->
         <!-- ============================================================== -->
-        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
-            <div class="auth-box bg-dark border-top border-secondary">
+        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-light">
+            <div class="auth-box bg-white border-top border-secondary">
                 <div id="loginform">
                     <div class="p-t-20 p-b-20 text-center">
                         <span class="db"><img src="{{ asset('backend/image/tokopancingan.png') }}" alt="logo"

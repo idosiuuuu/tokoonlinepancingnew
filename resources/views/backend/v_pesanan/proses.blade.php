@@ -32,7 +32,7 @@
                                         </td>
                                         <td>
                                             @if ($row->status == 'pending')
-                                                <span class="badge badge-primary">Proses</span>
+                                                <span class="badge badge-secondary">Pending</span>
                                             @else
                                                 <span class="badge badge-warning" style="color: white;">
                                                     {{ ucfirst($row->status) }}

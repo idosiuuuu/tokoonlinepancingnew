@@ -43,9 +43,6 @@
   <![endif]-->
 
 
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key="{{ config('midtrans.client_key') }}"></script>
-
 </head>
 
 <body>
@@ -67,7 +64,7 @@
                 <div class="pull-left">
                     <!-- Logo -->
                     <div class="header-logo">
-                        <a class="logo" href="#">
+                        <a class="logo" href="{{ route('beranda') }}">
                             <img src="{{ asset('image/logo.png') }}" alt="">
                         </a>
                     </div>
@@ -80,35 +77,17 @@
                 <div class="pull-right">
                     <ul class="header-btns">
                         @if (Auth::check())
+                            <!-- /Cart -->
                             <!-- Cart -->
                             <li class="header-cart dropdown default-dropdown">
-                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+                                <a href="{{ route('order.cart') }}">
                                     <div class="header-btns-icon">
                                         <i class="fa fa-shopping-cart"></i>
+                                        <!-- <span class="qty">3</span> -->
                                     </div>
-                                    <strong class="text-uppercase">Keranjang <i class="fa fa-caret-down"></i></strong>
-                                </div>
+                                    <strong class="text-uppercase">Keranjang</strong>
 
-                                <ul class="custom-menu">
-                                    @if ($order && $order->orderItems->count())
-                                        @foreach ($order->orderItems as $item)
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-cube"></i>
-                                                    {{ $item->produk->nama_produk }} ({{ $item->quantity }})
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                        <li class="divider"></li>
-                                        <li>
-                                            <a href="{{ route('order.cart') }}">
-                                                <i class="fa fa-shopping-cart"></i> Lihat Keranjang
-                                            </a>
-                                        </li>
-                                    @else
-                                        <li><a><i class="fa fa-info-circle"></i> Keranjang kosong</a></li>
-                                    @endif
-                                </ul>
+                                </a>
                             </li>
                             <!-- /Cart -->
                         @else
@@ -138,7 +117,8 @@
                                 <ul class="custom-menu">
                                     <li><a href="{{ route('customer.akun', ['id' => Auth::user()->id]) }}"><i
                                                 class="fa fa-user-o"></i> Akun Saya</a></li>
-                                    <li><a href="#"><i class="fa fa-check"></i> History</a></li>
+                                    <li><a href="{{ route('order.history') }}"><i class="fa fa-check"></i> History</a>
+                                    </li>
                                     <li>
                                         <a href="#"
                                             onclick="event.preventDefault(); document.getElementById('keluar-app').submit();"><i
@@ -161,7 +141,7 @@
                                     </div>
                                     <strong class="text-uppercase">Akun Saya<i class="fa fa-caret-down"></i></strong>
                                 </div>
-                                <a href="{{ route('auth.redirect') }}" class="text-uppercase">Login</a>
+                                <a href="{{ route('frontend.login') }}" class="text-uppercase">Login</a>
                             </li>
 
                             <!-- /Account -->
@@ -221,8 +201,9 @@
                     <ul class="menu-list">
                         <li><a href="{{ route('beranda') }}">Beranda</a></li>
                         <li><a href="{{ route('produk.all') }}">Produk</a></li>
-                        <li><a href="#">Lokasi</a></li>
-                        <li><a href="#">Hubungi Kami</a></li>
+                        <li><a href="{{ route('frontend.lokasi') }}">Lokasi</a></li>
+                        <li><a href="https://wa.me/6281936747553?text=Mas%20Dika%20saya%20mau%20pesan">Hubungi
+                                Kami</a></li>
                     </ul>
                 </div>
 
@@ -411,8 +392,7 @@
                         <h3 class="footer-header">Akun Saya</h3>
                         <ul class="list-links">
                             <li><a href="#">Akun Saya</a></li>
-                            <li><a href="#">Keranjang Saya</a></li>
-                            <li><a href="#">Login</a></li>
+                            <li><a href="{{ route('order.cart') }}">Keranjang Saya</a></li>
                         </ul>
                     </div>
                 </div>
@@ -425,8 +405,8 @@
                     <div class="footer">
                         <h3 class="footer-header">Layanan Pelanggan</h3>
                         <ul class="list-links">
-                            <li><a href="#">Tentang Kami</a></li>
-                            <li><a href="#">Cara Pemesanan</a></li>
+                            <li><a href="{{ route('frontend.profil') }}">Tentang Kami</a></li>
+                            <li><a href="{{ route('frontend.carapesan') }}">Cara Pemesanan</a></li>
                         </ul>
                     </div>
                 </div>
@@ -476,6 +456,14 @@
     <script src="{{ asset('frontend/js/nouislider.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.zoom.min.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+    <!-- Raja Ongkir -->
+    @stack('scripts')
+
+    <!-- Midstran -->
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ config('midtrans.client_key') }}"></script>
+
+
 
     <script>
         // previewFoto

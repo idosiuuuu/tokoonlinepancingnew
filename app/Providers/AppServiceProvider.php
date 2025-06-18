@@ -23,20 +23,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('*', function ($view) {
-        $order = null;
+        // View::composer('*', function ($view) {
+        // $order = null;
 
-        if (Auth::check()) {
-            $customer = Customer::where('user_id', Auth::id())->first();
-            if ($customer) {
-                $order = Order::where('customer_id', $customer->id)
-                    ->whereIn('status', ['pending', 'paid'])
-                    ->with('orderItems.produk')
-                    ->first();
-            }
-        }
+        // if (Auth::check()) {
+        //     $customer = Customer::where('user_id', Auth::id())->first();
+        //     if ($customer) {
+        //         $order = Order::where('customer_id', $customer->id)
+        //             ->whereIn('status', ['pending'])
+        //             ->with('orderItems.produk')
+        //             ->first();
+        //     }
+        // }
 
-        $view->with('order', $order);
-    });
+        // $view->with('order', $order);
+        // });
     }
 }

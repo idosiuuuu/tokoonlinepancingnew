@@ -6,6 +6,7 @@ use App\Helpers\ImageHelper;
 use App\Models\FotoProduk;
 use App\Models\Kategori;
 use App\Models\Produk;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -309,12 +310,20 @@ class ProdukController extends Controller
 
         $produk = $query->get();
         // dd($produk);
-        return view('backend.v_produk.cetak', [
+        // return view('backend.v_produk.cetak', [
+        //     'judul' => 'Laporan Produk',
+        //     'tanggalAwal' => $tanggalAwal,
+        //     'tanggalAkhir' => $tanggalAkhir,
+        //     'cetak' => $produk
+        // ]);
+
+        $pdf = Pdf::loadView('backend.v_produk.cetak', [
             'judul' => 'Laporan Produk',
             'tanggalAwal' => $tanggalAwal,
             'tanggalAkhir' => $tanggalAkhir,
             'cetak' => $produk
         ]);
+        return $pdf->stream("laporan_produk_{$tanggalAwal}_{$tanggalAkhir}.pdf");
     }
     public function detail($id)
     {
