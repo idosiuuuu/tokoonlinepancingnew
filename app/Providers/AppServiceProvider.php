@@ -39,8 +39,8 @@ class AppServiceProvider extends ServiceProvider
 
         // $view->with('order', $order);
         // });
-        if (env('APP_ENV') === 'production') {
-            URL::forceSchema('https');
+        if (env('APP_ENV') !== 'local') {
+            URL::forceScheme('https');
         }
     }
 }
