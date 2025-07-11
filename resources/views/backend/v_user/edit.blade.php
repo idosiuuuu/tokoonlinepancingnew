@@ -20,7 +20,7 @@
                                         @if ($edit->foto)
                                             <img src="{{ asset('storage/img-user/' . $edit->foto) }}" class="foto-preview"
                                                 width="100%">
-                                            <p></p>
+                                            <p></p> 
                                         @else
                                             <img src="{{ asset('storage/img-user/img-default.jpg') }}" class="foto-preview"
                                                 width="100%">

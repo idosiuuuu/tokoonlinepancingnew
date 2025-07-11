@@ -55,12 +55,17 @@
             </div>
 
             <!-- Select kota asal -->
-            <div class="form-group">
+            <div class="form-group" style="display:none;">
                 <label for="originSelect">Kota Asal:</label><br>
-                <select class="input" id="originSelect" style="width:100%"></select>
+                <select class="input" id="originSelect" style="width:100%">
+                    <option value="{{ $originId ?? '72559' }}" selected>
+                        {{ $originText ?? 'Paketiban pangkah tegal jawa tengah' }}
+                    </option>
+                </select>
             </div>
 
-            <input type="hidden" id="kota_asal" name="kota_asal">
+            <input type="hidden" id="kota_asal" name="kota_asal"
+                value="{{ $originText ?? 'Paketiban pangkah tegal jawa tengah' }}">
 
             <!-- Select kota tujuan -->
             <div class="form-group">
@@ -131,6 +136,11 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
         <script>
+            // default origin and destination select IDs
+            const originSelectId = '72559'; // ID kecamatan/kota asal
+            const originSelectText = 'Paketiban pangkah tegal jawa tengah'; // Teks placeholder untuk origin
+
+
             /**
              * Inisialisasi Select2 dengan AJAX (untuk origin dan destination)
              */

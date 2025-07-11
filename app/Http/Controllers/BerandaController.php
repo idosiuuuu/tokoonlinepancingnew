@@ -13,9 +13,10 @@ class BerandaController extends Controller
     public function berandaBackend()
     {
         $produk = Produk::all()->count();
-        $user = User::where('role', '!=', '2')->count();
+        $user = User::all()->count();
         $kategori = Kategori::all()->count();
         $customer = User::where('role','2')->count();
+
 
         return view('backend.v_beranda.index', [
             'judul' => 'Beranda',

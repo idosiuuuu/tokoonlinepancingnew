@@ -53,7 +53,6 @@ class UserController extends Controller
         ]);
         $validatedData['status'] = 0;
 
-        // dump($validatedData);
 
         // menggunakan ImageHelper 
         if ($request->file('foto')) {

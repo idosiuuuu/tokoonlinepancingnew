@@ -39,7 +39,7 @@ Route::resource('backend/produk', ProdukController::class, ['as' => 'backend'])-
 Route::resource('backend/customer', CustomerController::class, ['as' => 'backend'])->middleware('auth');
 
 // Route untuk login frontend
-Route::get('login', [LoginController::class, 'loginFrontend'])->name('frontend.login');
+Route::get('frontend/login', [LoginController::class, 'loginFrontend'])->name('frontend.login');
 Route::post('frontend/login', [LoginController::class, 'authenticateFrontend'])->name('frontend.login');
 // Route::get('frontend/register', [RegisterController::class, 'registerFrontend'])->name('frontend.register');
 // Route::post('frontend/register', [RegisterController::class, 'storeFrontend'])->name('frontend.register');
