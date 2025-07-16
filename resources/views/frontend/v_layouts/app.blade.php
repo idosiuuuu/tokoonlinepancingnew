@@ -436,7 +436,7 @@
                         Copyright &copy;
                         <script>
                             document.write(new Date().getFullYear());
-                        </script> Toko Dika Fishing <i class="#" aria-hidden="true"></i> by
+                        </script> Toko Dika Fishing <i class="#" aria-hidden="true"></i>
                         <a href="#" target="_blank"></a>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
