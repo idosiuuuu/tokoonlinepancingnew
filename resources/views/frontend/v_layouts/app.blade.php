@@ -13,8 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('image/icon_univ_bsi.png') }}">
-    <title>tokoonline</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('image/logo_3.png') }}">
+    <title>dikafishing</title>
 
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
@@ -52,7 +52,7 @@
         <div id="top-header">
             <div class="container">
                 <div class="pull-left">
-                    <span>Selamat datang di toko online</span>
+                    <span>Selamat datang di toko dika fishing</span>
                 </div>
             </div>
         </div>
@@ -437,7 +437,7 @@
                         <script>
                             document.write(new Date().getFullYear());
                         </script> Toko Dika Fishing <i class="#" aria-hidden="true"></i> by
-                        <a href="#" target="_blank">ANDIKA AND FIRDAUS</a>
+                        <a href="#" target="_blank"></a>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
                     <!-- /footer copyright -->
